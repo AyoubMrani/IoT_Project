@@ -1,0 +1,9 @@
+Model_ID,Technique,Model_File,File_Size_MB,RAM_Before_Load_MB,RAM_Used_MB,RAM_After_Load_MB,Avg_Inference_Time_ms,Min_Inference_Time_ms,Max_Inference_Time_ms,Avg_CPU_Usage_%,Max_CPU_Usage_%,Accuracy_%,Status
+P1,Unstructured Pruning,P1_model.pt,8.74146556854248,1404.24,22.46,1381.78,50.2352,29.6154,163.8106,96.16,100.0,45.62,Success
+P2,Structured Pruning,P2_model.pt,8.74146556854248,1192.76,-0.08,1192.84,33.2287,30.9597,40.3612,97.07,100.0,51.88,Success
+P3,Magnitude Pruning,P3_model.pt,8.74146556854248,1238.73,0.0,1238.73,33.5392,30.6263,39.4775,98.34,100.0,100.0,Success
+Q1,Dynamic Quantization,Q1_model.pt,8.719735145568848,1238.83,0.0,1238.83,34.879,30.6374,50.8605,97.68,100.0,0.0,Success
+Q2,Static PTQ,Q2_model.pt,8.719735145568848,1212.46,0.0,1212.46,33.8718,31.774,38.9795,98.42,100.0,90.0,Success
+Q3,QAT,Q3_model.pt,8.719735145568848,1190.2,0.0,1190.2,37.1875,30.5489,46.2622,96.88,100.0,0.0,Success
+Q4,Weight-Only,Q4_model.pt,8.719735145568848,1229.2,0.0,1229.2,42.9744,35.0113,54.184,97.33,100.0,0.0,Success
+Q5,Mixed Precision (FP16),Q5_model.pt,4.4174909591674805,1227.0,0.0,1227.0,56.6678,43.3038,71.4014,96.08,99.7,100.0,Success

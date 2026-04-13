@@ -1,0 +1,41 @@
+\babel@toc {nil}{}\relax 
+\contentsline {chapter}{Resume Executif}{1}{chapter*.1}%
+\contentsline {chapter}{\numberline {1}Introduction et Contexte}{4}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Motivation du Projet}{4}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Architecture Proposee}{4}{section.1.2}%
+\contentsline {chapter}{\numberline {2}Phase 1: Entrainement du Modele de Base}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Configuration}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Resultats}{5}{section.2.2}%
+\contentsline {chapter}{\numberline {3}Phase 2: Optimisation par Quantification et Elagage}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Techniques de Quantification (Q1-Q5)}{7}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Techniques d'Elagage (P1-P3)}{7}{section.3.2}%
+\contentsline {chapter}{\numberline {4}Phase 3: Evaluation Systematique Multi-VM}{9}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Profils Materiels}{9}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Matrice de Precision}{9}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Matrice Temps Inference}{10}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Phase 4: Selection Optimale et Ponderation}{11}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Scoring Pondere}{11}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Scores et Selection}{11}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Poids de Vote Pondere}{11}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Phase 5: Intelligence Collective Distribuee}{12}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Architecture Systeme}{12}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Mecanisme de Vote Pondere}{12}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Resultats Phase 5}{12}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Phase 6: Integration MQTT IoT Complete}{14}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Infrastructure MQTT}{14}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Telemetrie en Temps Reel}{14}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Systeme d'Alarmes}{14}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Resultats Test Alarmes}{15}{section.7.4}%
+\contentsline {chapter}{\numberline {8}Defis Rencontres et Solutions}{16}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Defi 1: Etat Dictionnaire Inconsistant}{16}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Defi 2: Consommation RAM Critique}{16}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Defi 3: Commutation MQTT Credentials}{16}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Defi 4: Calcul Taux de Consensus}{16}{section.8.4}%
+\contentsline {chapter}{\numberline {9}Conclusion}{17}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Recapitulatif}{17}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Performances Finales}{17}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Contributions}{17}{section.9.3}%
+\contentsline {chapter}{\numberline {A}Screenshots}{18}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Machines Virtuelles avec MQTT Connectees}{18}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Dashboard ThingsBoard avec Alarmes en Temps Reel}{19}{section.A.2}%
+\contentsline {chapter}{\numberline {B}Fichiers Generes}{20}{appendix.B}%

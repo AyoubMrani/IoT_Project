@@ -1,0 +1,613 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+\setlength{\parindent}{1.25cm}
+
+\definecolor{darkblue}{RGB}{0,50,100}
+\definecolor{lightblue}{RGB}{220,240,255}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textit{Intelligence Collective Medicale}}
+\fancyhead[R]{Master 2026}
+\fancyfoot[C]{\thepage}
+
+\lstset{basicstyle=\ttfamily\small, breaklines=true, frame=single, backgroundcolor=\color{lightblue}}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{3cm}
+
+{\LARGE \textbf{Rapport de Projet de Maitrise}}\\[2cm]
+
+{\large \textbf{Sujet :}}\\[0.5cm]
+
+{\Huge \textbf{Systeme d'Intelligence Collective pour la Classification Medicale en Environnement IoT Distribue}}\\[3cm]
+
+{\large \textbf{Realise par :}}\\[0.3cm]
+{\large Ayoub Mrani Alaoui}\\
+{\large Jihane El Aouni}\\
+{\large Douae Chater}\\
+{\large Najlae Sebbar}\\[2cm]
+
+{\large \textbf{Encadre par :}}\\[0.3cm]
+{\large Mr Said Ohamouddou}\\[2cm]
+
+\vfill
+\end{titlepage}
+
+\newpage
+
+% RESUME EXECUTIF
+\chapter*{Resume Executif}
+\addcontentsline{toc}{chapter}{Resume Executif}
+
+Ce projet developpe un systeme d'intelligence collective pour la classification d'images medicales dans un environnement IoT distribue. Le systeme combine trois machines virtuelles configurees avec des modeles optimises (quantification et elagage) executant des inferences paralleles, aggregees par un vote pondere central.
+
+\vspace{0.5cm}
+\textbf{Resultats Cles:}
+\begin{itemize}
+    \item \textbf{Precision Collective:} 100\% sur 10 images de test
+    \item \textbf{Compression Optimale:} Q5 atteint 48.09\% de reduction (8.51 MB vers 4.42 MB)
+    \item \textbf{Vitesse de Pointe:} P3 offre 33.54 ms/image (6.1x plus rapide)
+    \item \textbf{Consensus Unanime:} 100\% d'accord entre trois VMs
+    \item \textbf{Integration IoT:} 40 points de telemetrie publies avec succes
+    \item \textbf{Systeme d'Alarmes:} 30+ alarmes validees et declenchees
+\end{itemize}
+
+\newpage
+
+% TABLE DES MATIERES
+\tableofcontents
+\newpage
+
+% CHAPITRE 1: INTRODUCTION
+\chapter{Introduction et Contexte}
+
+\section{Motivation du Projet}
+
+La classification d'images medicales constitue une tache critique en diagnostic assiste par ordinateur. Les defis majeurs incluent:
+
+\begin{enumerate}
+    \item \textbf{Precision:} Necessaire une exactitude proche de 100\% pour applications medicales
+    \item \textbf{Latence:} Systemes edge/IoT imposent contraintes strictes (< 300 ms)
+    \item \textbf{Ressources:} Limitation drastique RAM et CPU (500 MB typiquement)
+    \item \textbf{Scalabilite:} Support de multiples materiels heterogenes
+    \item \textbf{Robustesse:} Surveillance en temps reel et alarmes
+\end{enumerate}
+
+\section{Architecture Proposee}
+
+Notre approche combine:
+\begin{itemize}
+    \item \textbf{Optimisation:} 8 techniques (quantification, elagage) testees
+    \item \textbf{Distribution:} 3 machines virtuelles en parallele
+    \item \textbf{Agregation:} Vote pondere base sur performance
+    \item \textbf{Telemetrie IoT:} Integration MQTT ThingsBoard
+    \item \textbf{Systeme d'Alarmes:} Detection anomalies temps reel
+\end{itemize}
+
+% CHAPITRE 2: PHASE 1
+\chapter{Phase 1: Entrainement du Modele de Base}
+
+\section{Configuration}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Parametre} & \textbf{Valeur} \\
+\hline
+Architecture & MobileNetV2 \\
+Dataset & LC25000 (Cancer Colon+Poumon) \\
+Classes & 5 \\
+Epochs & 5 \\
+Batch Size & 32 \\
+\hline
+\end{tabular}
+\caption{Configuration Phase 1}
+\end{table}
+
+\section{Resultats}
+
+Le modele de base MobileNetV2, entraine sur le dataset LC25000 comprenant des images de cancers du colon et du poumon, delibre des performances exceptionnelles. Apres 5 epochs d'entrainement sur GPU CUDA avec une taille de batch de 32, le modele atteint une precision de validation de 99.9\%, confirmee par une precision de test de 99.88\%.
+
+Cette performance de base est remarquable car elle etablit une reference solide pour evaluer l'impact des techniques d'optimisation qui seront appliquees en Phase 2. Le modele, bien que performant, occupait 8.51 MB de memoire, ce qui pose des defis pour le deploiement sur des dispositifs constraints comme les IoT.
+
+Le temps d'inference moyen de 0.1639 ms par image sur GPU montre que le modele baseline est rapidement execute, mais nous devons verifier comment cette latence evolue sur des processeurs CPU moins puissants typiques des environnements edge et IoT.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Metrique} & \textbf{Valeur} \\
+\hline
+Precision Test & 99.88\% \\
+Rappel & 99.88\% \\
+Score F1 & 99.88\% \\
+Temps Entrainement & 7.19 minutes \\
+Taille Modele & 8.51 MB \\
+Temps Inference & 0.1639 ms/image \\
+\hline
+\end{tabular}
+\caption{Resultats Phase 1 - Performance Baseline}
+\end{table}
+
+Ces metriques etablissent notre point de reference pour les comparaisons futures. Chaque technique d'optimisation sera evaluee non seulement sur sa capacite a reduire la taille ou accelerer l'inference, mais aussi sur sa capacite a preserver ou ameliorer cette precision exceptionnelle.
+
+% CHAPITRE 3: PHASE 2
+\chapter{Phase 2: Optimisation par Quantification et Elagage}
+
+\section{Techniques de Quantification (Q1-Q5)}
+
+La quantification represente une strategie majeure pour reduire la taille des modeles tout en maintenant precisions. En reduisant la precision numerique (float32 vers int8, float16), on economise de la memoire et on accelere les operations.
+
+Nous avons teste cinq techniques de quantification differentes, chacune avec ses propres caracteristiques et compromis. La technique Q5 (Precision Mixte FP16) s'est revelee particulierement efficace, accomplissant une reduction de taille de 48.09\% (8.51 MB vers 4.42 MB) tout en preservant la precision de 99.88\%.
+
+Cette reduction majeure de taille rend le modele eligible pour des deploiements avec bande passante limitee, ce qui est crucial pour les architectures IoT distribuees ou les mises a jour de modeles doivent transiter sur des connexions constraintes.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{ID} & \textbf{Technique} & \textbf{Taille} & \textbf{Precision} & \textbf{Grade} \\
+\hline
+Q1 & Dynamic Quant & 8.72 MB & 99.88\% & A \\
+Q2 & PTQ Statique & 8.72 MB & 99.88\% & A \\
+Q3 & QAT & 8.72 MB & 99.88\% & A \\
+Q4 & Poids Seulement & 8.72 MB & 99.88\% & A \\
+\cellcolor{lightblue} Q5 & \cellcolor{lightblue} Mixte FP16 & \cellcolor{lightblue} 4.42 MB & \cellcolor{lightblue} 99.88\% & \cellcolor{lightblue} A+ \\
+\hline
+P1 & Elagage NS & 8.74 MB & 32.17\% & C \\
+P2 & Elagage Struct & 8.74 MB & 31.45\% & C \\
+\cellcolor{lightblue} P3 & \cellcolor{lightblue} Elagage Magn & \cellcolor{lightblue} 8.74 MB & \cellcolor{lightblue} 99.92\% & \cellcolor{lightblue} A \\
+\hline
+\end{tabular}
+\caption{Resultats Phase 2 - Quantification et Elagage}
+\end{table}
+
+\section{Techniques d'Elagage (P1-P3)}
+
+L'elagage complementent la quantification en supprimant les poids peu importants du modele. Nous avons teste trois variantes d'elagage, avec resultats tres differents.
+
+Les techniques d'elagage non-structuree (P1) et structuree (P2) ont malheureusement sacrifie beaucoup de precision pour gagner un peu de vitesse, les rendant inadaptes pour les applications medicales critiques. Cependant, P3 (Elagage par Magnitude) a obtenu des resultats remarquables: non seulement elle a preserve 99.92\% de precision (meme legerement mieux que baseline), mais elle a egalement delivre des temps d'inference ultra-rapides de 0.1915 ms.
+
+\textbf{Conclusions Phase 2:}
+
+En resume, Phase 2 a identifie deux candidats exceptionnels pour le deploiement:
+\begin{itemize}
+    \item \textbf{Q5 (Precision Mixte FP16):} Meilleur pour les scenarios de bande passante limitee avec reduction de taille de 48\%
+    \item \textbf{P3 (Elagage Magnitude):} Parfait pour les scenarios latence-critique avec performance exceptionnelle
+\end{itemize}
+
+% CHAPITRE 4: PHASE 3
+\chapter{Phase 3: Evaluation Systematique Multi-VM}
+
+\section{Profils Materiels}
+
+Avant d'evaluer les modeles, nous avons configure trois machines virtuelles avec des profils materiels distincts pour simuler un ecosysteme IoT/Edge/Production realiste:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{VM} & \textbf{RAM} & \textbf{CPU} & \textbf{Role} \\
+\hline
+VM1 & 423 MB & 1 Core & IoT Contraint \\
+VM2 & 926 MB & 2 Cores & Edge Server \\
+VM3 & 1933 MB & 2 Cores & Production \\
+\hline
+\end{tabular}
+\caption{Profiles Materiels VMs - Ecosysteme Heterogene}
+\end{table}
+
+VM1 simule un dispositif IoT extreme, avec seulement 423 MB de RAM et un processeur monocore. VM2 represente un serveur edge intermediaire avec ressources moderees. VM3 simule un environnement production avec ressources abondantes. Cette diversite nous permet de valider que nos modeles optimises fonctionnent correctement sur differentes configurations.
+
+\section{Matrice de Precision}
+
+La matrice de precision 3x8 reveale des resultats tres importants. Seuls deux modeles - P3 et Q5 - ont maintenu une precision parfaite de 100\% sur toutes les machines virtuelles:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{VM} & Q1 & Q2 & Q3 & Q4 & Q5 & P1 & P2 & P3 \\
+\hline
+VM1 & 1.25\% & 11.25\% & 0\% & 92.5\% & \cellcolor{lightblue}100\% & 45.62\% & 51.88\% & 100\% \\
+VM2 & 99.38\% & 51.88\% & 0\% & 0\% & \cellcolor{lightblue}100\% & 45.62\% & 51.88\% & 100\% \\
+VM3 & 0\% & 90\% & 0\% & 0\% & \cellcolor{lightblue}100\% & 45.62\% & 51.88\% & 100\% \\
+\hline
+\end{tabular}
+\caption{Matrice Precision Phase 3 - 3 VMs x 8 Modeles}
+\end{table}
+
+Cette decouverte est cruciale: Q1, Q2, Q3 et Q4 montrent une precision tres variable selon la VM, indiquant des problemes de compatibilite ou de corruption des poids lors de la serialisation. Seuls P3 et Q5 sont robustes et pretes pour la production.
+
+\section{Matrice Temps Inference}
+
+Au-dela de la precision, les performances de latence varient significativement selon le modele et le materiel:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{VM} & Q1 & Q2 & Q3 & Q4 & Q5 & P1 & P2 & P3 \\
+\hline
+VM1 & 174 & 184 & 229 & 230 & 234 & 188 & 198 & 204 \\
+VM2 & 54.5 & 52 & 47.4 & 45.2 & \cellcolor{lightblue}43 & 90.2 & 92.1 & 79.6 \\
+VM3 & 34.9 & 33.9 & 37.2 & 43 & 56.7 & 50.2 & 33.2 & \cellcolor{lightblue}33.5 \\
+\hline
+\end{tabular}
+\caption{Matrice Temps Inference Phase 3 (ms/image)}
+\end{table}
+
+L'observation majeure est que P3 offre une acceleration spectaculaire de 6.1x en passant de VM1 (204ms) a VM3 (33.5ms), tout en conservant 100\% de precision. Ceci demontre que l'elagage par magnitude est particulierement efficace sur les materiels modernes multi-coeurs.
+
+% CHAPITRE 5: PHASE 4
+\chapter{Phase 4: Selection Optimale et Ponderation}
+
+\section{Scoring Pondere}
+
+Chaque VM a des criteres de ponderation specifiques:
+
+\begin{description}
+    \item[VM1 (IoT)] RAM 40\% + CPU 40\% + Precision 20\%
+    \item[VM2 (Edge)] RAM 30\% + Vitesse 30\% + Precision 40\%
+    \item[VM3 (Production)] Precision 60\% + Vitesse 25\% + RAM 15\%
+\end{description}
+
+\section{Scores et Selection}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{VM} & \textbf{Modele} & \textbf{Score Phase 4} \\
+\hline
+\cellcolor{lightblue} VM1 & \cellcolor{lightblue} Q5 & \cellcolor{lightblue} 0.68 \\
+\cellcolor{lightblue} VM2 & \cellcolor{lightblue} Q5 & \cellcolor{lightblue} 0.96 \\
+\cellcolor{lightblue} VM3 & \cellcolor{lightblue} P3 & \cellcolor{lightblue} 0.97 \\
+\hline
+\end{tabular}
+\caption{Selection et Scores Phase 4}
+\end{table}
+
+\section{Poids de Vote Pondere}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{VM} & \textbf{Poids Brut} & \textbf{Poids Normalise} \\
+\hline
+VM1 & 0.68 & 26.05\% \\
+VM2 & 0.96 & 36.78\% \\
+VM3 & 0.97 & 37.16\% \\
+\hline
+\textbf{Total} & \textbf{2.61} & \textbf{100.00\%} \\
+\hline
+\end{tabular}
+\caption{Poids de Vote Pondere}
+\end{table}
+
+% CHAPITRE 6: PHASE 5
+\chapter{Phase 5: Intelligence Collective Distribuee}
+
+\section{Architecture Systeme}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Composant} & \textbf{Adresse} & \textbf{Modele} & \textbf{Poids} \\
+\hline
+VM1 & 192.168.52.10:5001 & Q5 (FP16) & 26.05\% \\
+VM2 & 192.168.52.20:5002 & Q5 (FP16) & 36.78\% \\
+VM3 & 192.168.52.30:5003 & P3 (Elagage) & 37.16\% \\
+\hline
+\end{tabular}
+\caption{Architecture Phase 5}
+\end{table}
+
+\section{Mecanisme de Vote Pondere}
+
+L'intelligence collective repose sur un mecanisme de vote pondere qui combine les predictions de chaque VM. Au lieu de prendre simplement la majorite, chaque VM se voit assigner un poids base sur sa performance en Phase 4.
+
+Le vote pondere combine predictions:
+
+$$\text{Score}_{classe} = \sum_{i=1}^{3} (\text{Confiance}_{i,classe} \times w_i)$$
+
+Ou $w_i$ sont les poids normalises: 26.05\% pour VM1, 36.78\% pour VM2, et 37.16\% pour VM3. Ceci signifie que VM3, avec sa performance optimale en Phase 4, exerce une influence legerement plus grande sur la decision collective.
+
+\section{Resultats Phase 5}
+
+L'execution du systeme d'intelligence collective sur 10 images de test medicales a produit des resultats extraordinaires. Chaque VM a execute independamment son modele optimise, et l'orchestrateur a agrege les resultats via le vote pondere.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Metrique} & \textbf{Valeur} \\
+\hline
+Nombre Images & 10 \\
+Precision Collective & 100\% (10/10) \\
+Confiance Moyenne & 99.98\% \\
+Votes Unanimes & 10/10 (100\%) \\
+Tentatives Augmentation & 0 \\
+VMs Saines & 3/3 \\
+\hline
+\end{tabular}
+\caption{Resultats Phase 5 - Intelligence Collective Distribuee}
+\end{table}
+
+La precision collective de 100\% signifie que chaque diagnostic produit par le systeme etait correct. Encore plus remarquable, les trois VMs ont ete unanimes sur toutes les predictions, ce qui indique un consensus fort et une haute confiance dans les diagnostics.
+
+La confiance moyenne de 99.98\% est exceptionnelle pour une application medicale. Cela signifie que le systeme n'a jamais doute de ses decisions. En fait, le systeme de re-evaluation avec augmentation de donnees (declenchee si confiance < 70\%) n'a jamais ete active, car toutes les predictions ont depasse le seuil de confiance.
+
+Les VMs individuels ont egalement maintenu 100\% de precision:
+\begin{itemize}
+    \item VM1 (Q5): 100\% (10/10 images correctes)
+    \item VM2 (Q5): 100\% (10/10 images correctes)
+    \item VM3 (P3): 100\% (10/10 images correctes)
+\end{itemize}
+
+% CHAPITRE 7: PHASE 6
+\chapter{Phase 6: Integration MQTT IoT Complete}
+
+\section{Infrastructure MQTT}
+
+Phase 6 integre le systeme avec une plateforme IoT reelle via MQTT, le protocole standard pour la communication legere machine-a-machine. Nous avons deploye ThingsBoard Community Edition sur le host Windows, creant un broker MQTT sur 192.168.52.1:1883 accessible a tous les dispositifs du reseau.
+
+La configuration MQTT a ete optimisee pour la fiabilite et la performance:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Parametre} & \textbf{Valeur} \\
+\hline
+Broker MQTT & ThingsBoard Community \\
+Adresse & 192.168.52.1:1883 \\
+Topic & v1/devices/me/telemetry \\
+QoS & 1 (Au moins une livraison) \\
+Keep-Alive & 60 secondes \\
+\hline
+\end{tabular}
+\caption{Configuration MQTT Phase 6}
+\end{table}
+
+\section{Telemetrie en Temps Reel}
+
+Chaque inference genere 40 points de donnees publies en temps reel vers ThingsBoard:
+
+\begin{itemize}
+    \item \textbf{Predictions:} Le diagnostic collectif, sa confiance, et la verite terrain
+    \item \textbf{Consensus:} Le taux de consensus (pourcentage de VMs d'accord)
+    \item \textbf{Sante VM:} Utilisation CPU, RAM et latence pour chaque VM
+    \item \textbf{Metadonnees:} Timestamp, nom d'image, numero de phase
+\end{itemize}
+
+\section{Systeme d'Alarmes}
+
+Au-dela de la telemetrie brute, nous avons implemente un systeme d'alarmes automatique qui declenche des alertes quand les seuils sont depasses:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Type Alarme} & \textbf{Seuil} & \textbf{Criticalite} \\
+\hline
+HIGH\_LATENCY & > 300 ms & Moyenne \\
+HIGH\_CPU\_USAGE & > 85\% & Moyenne \\
+HIGH\_RAM\_USAGE & > 450 MB & Haute \\
+LOW\_CONSENSUS & < 70\% & Critique \\
+\hline
+\end{tabular}
+\caption{Seuils d'Alarmes Phase 6}
+\end{table}
+
+Ces seuils ont ete definis basees sur les specifications de performance du systeme et les benchmarks industriels pour les applications medicales.
+
+\section{Resultats Test Alarmes}
+
+Pour valider le systeme d'alarmes, nous avons execuste deux scenarios de test differents:
+
+\textbf{Scenario 1: Operation Normale (10 Images)}
+
+En conditions normales, le systeme fonctionne sans trigger d'alarmes. Les metriques resterent en-dessous des seuils:
+\begin{itemize}
+    \item Precision Collective: 100\%
+    \item Confiance: 99.98\%
+    \item CPU Moyen: 2.8\%
+    \item RAM Moyen: 370 MB (bien en-dessous du seuil de 450 MB)
+    \item Latence: 145-200 ms (bien en-dessous du seuil de 300 ms)
+    \item Alarmes declenchees: 0 (systeme sain)
+\end{itemize}
+
+\textbf{Scenario 2: Test Alarmes (Metriques Gonflees)}
+
+Pour valider que le systeme d'alarmes fonctionne, nous avons execute une version qui simule des conditions de stress extremes:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Scenario Test} & \textbf{Resultat} \\
+\hline
+CPU: 88-92\% & 10 alarmes HIGH\_CPU\_USAGE declenchees ✓ \\
+RAM: 460-512 MB & 10 alarmes HIGH\_RAM\_USAGE declenchees ✓ \\
+Latence: 450 ms & 10 alarmes HIGH\_LATENCY declenchees ✓ \\
+\hline
+\textbf{Total} & \textbf{30 alarmes publiees et visibles} ✓ \\
+Precision maintenue & 100\% (metriques n'affectent pas inference) ✓ \\
+Consensus & 100\% unanime maintenu ✓ \\
+\hline
+\end{tabular}
+\caption{Resultats Test Systeme d'Alarmes}
+\end{table}
+
+Ces resultats confirment que le systeme d'alarmes fonctionne parfaitement et independamment de la qualite des inferences. Les alarmes sont declenchees correctement sans impact sur les diagnostics.
+
+% CHAPITRE 8: DEFIS ET SOLUTIONS
+\chapter{Defis Rencontres et Solutions}
+
+\section{Defi 1: Etat Dictionnaire Inconsistant}
+
+\textbf{Probleme:} Q1, Q2, Q3 montrent precision tres faible sur certaines VMs.
+
+\textbf{Racine Cause:} Etat-dict non correctement restaures.
+
+\textbf{Solution:}
+\begin{enumerate}
+    \item Validation checksum des poids
+    \item Nettoyage etats incompatibles
+    \item Re-serialisation explicite
+    \item Test coherence post-chargement
+\end{enumerate}
+
+\textbf{Resultat:} P3 et Q5 atteignent 100\% sur toutes VMs.
+
+\section{Defi 2: Consommation RAM Critique}
+
+\textbf{Probleme:} P2 consomme 116.79 MB sur VM1 (28\% du total).
+
+\textbf{Solution:} Abandon P2 pour IoT, selection P3 (6.5 MB) ou Q5 (5 MB).
+
+\textbf{Resultat:} VM1 peut executer confortablement.
+
+\section{Defi 3: Commutation MQTT Credentials}
+
+\textbf{Probleme:} Systeme alarmes echoue - aucune alarme n'apparait.
+
+\textbf{Racine Cause:} Tentative basculer credentials sur une seule connexion.
+
+\textbf{Solution:} Creer client MQTT separate par VM.
+
+\textbf{Resultat:} 30 alarms delimiter et visibles ThingsBoard.
+
+\section{Defi 4: Calcul Taux de Consensus}
+
+\textbf{Probleme:} Consensus affichait 0\% au lieu 100\%.
+
+\textbf{Solution:} Calcul dynamique base sur donnees reelles, pas field inexistant.
+
+\textbf{Resultat:} Consensus affiche correctement 100\%.
+
+% CHAPITRE 9: CONCLUSION
+\chapter{Conclusion}
+
+\section{Recapitulatif}
+
+Ce projet livre un systeme complet:
+
+\begin{enumerate}
+    \item Phase 1: Baseline 99.88\%
+    \item Phase 2: Q5 48\% compression, P3 33.54ms speed
+    \item Phase 3: Matrice 3x8 complete, P3 et Q5 100\% partout
+    \item Phase 4: Scoring pondere defini (26.05\%, 36.78\%, 37.16\%)
+    \item Phase 5: 100\% collective unanime
+    \item Phase 6: MQTT, ThingsBoard, 30+ alarms valides
+\end{enumerate}
+
+\section{Performances Finales}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Metrique} & \textbf{Valeur} \\
+\hline
+Precision & 100\% \\
+Confiance & 99.98\% \\
+Consensus & 100\% unanime \\
+Latence & 145-200 ms \\
+Disponibilite & 100\% \\
+Points Telemetrie & 40 par image \\
+Phases Completees & 6/6 \\
+\hline
+\end{tabular}
+\caption{Metriques Finales}
+\end{table}
+
+\section{Contributions}
+
+\begin{itemize}
+    \item Methodologie selection adaptative basee contraintes
+    \item Vote pondere heterogene
+    \item Validation croisee hardware
+    \item Architecture MQTT distribuee
+\end{itemize}
+
+% ANNEXES
+\appendix
+
+\chapter{Screenshots}
+
+\section{Machines Virtuelles avec MQTT Connectees}
+
+La figure suivante affiche les trois machines virtuelles (VM1, VM2, VM3) executant simultanement les serveurs d'inference avec connexion MQTT active au broker ThingsBoard sur 192.168.52.1:1883. On peut observer dans les logs de chaque terminal:
+
+\begin{itemize}
+    \item VM1 (gauche): Serveur en ecoute sur port 5001, modele Q5 charge en memoire, publiant metrics MQTT
+    \item VM2 (centre): Serveur en ecoute sur port 5002, performant 2.2x plus rapidement que VM1
+    \item VM3 (droite): Serveur en ecoute sur port 5003, utilisant modele P3, performances optimales
+\end{itemize}
+
+Chaque VM affiche son utilisation CPU/RAM et confirme la connexion MQTT reussie au broker.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Screenshots/Machines_VM_Terminals.png}
+\caption{Les trois machines virtuelles executant avec connexion MQTT active a 192.168.52.1:1883}
+\label{fig:vm_terminals}
+\end{figure}
+
+\section{Dashboard ThingsBoard avec Alarmes en Temps Reel}
+
+La deuxieme capture d'ecran montre le dashboard ThingsBoard affichant l'etat du systeme en temps reel. Ce dashboard fournit une vue operationnelle complete du systeme d'intelligence collective:
+
+\begin{itemize}
+    \item \textbf{Consensus Rate:} Affiche 100\% unanime entre les trois VMs
+    \item \textbf{Metriques Individuals:} Affiche CPU, RAM et latence pour VM1, VM2, VM3
+    \item \textbf{Derniere Prediction:} Montre la prediction collective avec confiance associee
+    \item \textbf{Historique Alarmes:} Affiche les 30+ alarmes declenchees lors du test (HIGH\_LATENCY, HIGH\_CPU, HIGH\_RAM)
+    \item \textbf{Statut Connexion:} Confirme que les 4 devices MQTT sont connectes et publiant
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Screenshots/Dashboard.png}
+\caption{Dashboard ThingsBoard affichant consensus 100\%, metriques VMs, et alarmes declenchees}
+\label{fig:dashboard_alarms}
+\end{figure}
+
+\chapter{Fichiers Generes}
+
+\begin{itemize}
+    \item orchestrator\_mqtt.py - Orchestrateur principal (production)
+    \item node\_server\_mqtt.py - Serveur VM (deploye 3x)
+    \item orchestrator\_mqtt\_alarm\_triggered.py - Version test alarmes
+    \item Progress/PHASE5\_6\_EVALUATION\_RESULTS.json
+    \item Progress/PHASE5\_6\_ALARM\_TEST\_RESULTS.json
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  thingsboard:
+    image: thingsboard/tb-ce:latest
+    container_name: thingsboard
+    ports:
+      - "8080:8080"
+      - "1883:1883"
+      - "5683:5683/udp"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/thingsboard
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQL82Dialect
+    depends_on:
+      - postgres
+    volumes:
+      - thingsboard-data:/data
+    restart: unless-stopped
+    networks:
+      - thingsboard-network
+
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=thingsboard
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - thingsboard-network
+
+volumes:
+  thingsboard-data:
+  postgres-data:
+
+networks:
+  thingsboard-network:
+    driver: bridge

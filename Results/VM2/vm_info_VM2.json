@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-04-09 16:11:40",
+  "total_ram_mb": 926.2109375,
+  "cpu_count": 2,
+  "device": "cpu",
+  "results_file": "phase3_results_VM2.csv",
+  "total_models_tested": 8,
+  "successful_tests": 8,
+  "oom_models": 0
+}
